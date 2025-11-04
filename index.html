@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Gestão de Notas Fiscais</title>
+<style>
+/* Paleta atualizada: azul nos botões/menus, resto original */
+:root {
+  --primary: #003c8f;   /* azul escuro para botões ativos e hover */
+  --accent: #0277bd;    /* azul médio para botões normais */
+  --bg: #f4f0f8;        
+  --card: #fff;          
+  --text: #333;          
+}
+
+*{box-sizing:border-box}
+body{font-family:Arial,Helvetica,sans-serif;background-color:var(--bg);margin:0;color:var(--text)}
+header{background-color:var(--primary);color:#fff;padding:20px;text-align:center;font-size:24px;font-weight:700;border-bottom:4px solid rgba(0,0,0,0.03)}
+nav{display:flex;justify-content:center;margin:20px 0;gap:12px;flex-wrap:wrap;padding:0 12px}
+nav button{padding:10px 18px;font-size:15px;border:0;border-radius:8px;cursor:pointer;background-color:var(--accent);color:#fff;transition:transform .12s ease}
+nav button.active,nav button:hover{background-color:var(--primary);transform:translateY(-1px)}
+
+section{display:none;max-width:1200px;margin:12px auto;padding:18px;background:var(--card);border-radius:10px;box-shadow:0 6px 18px rgba(0,0,0,0.06);overflow:auto}
+section.active{display:block}
+
+label{display:block;margin-top:12px;font-weight:700;color:#1d3ca6}
+input,select,textarea{width:100%;padding:10px;margin-top:6px;border-radius:6px;border:1px solid #ccc;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--primary);box-shadow:0 0 6px rgba(0,60,143,0.12)}
+
+button.send{margin-top:18px;padding:12px;background:var(--primary);color:#fff;font-weight:700;border:0;border-radius:6px;cursor:pointer;max-width:320px;width:100%}
+
+.previewBox{
+  margin-top:18px;
+  background:#eaf3ff;
+  border-left:5px solid var(--primary);
+  padding:12px;
+  font-size:15px;
+  white-space:pre-line;
+  border-radius:6px;
+}
+
+/* --- restante do seu código permanece idêntico --- */
+
+/* Tabela */
+table{width:100%;border-collapse:collapse;margin-top:18px;font-size:14px;min-width:900px}
+th,td{border:1px solid #e6dff1;padding:10px;text-align:center;vertical-align:middle}
+th{background:var(--primary);color:#fff;font-weight:600}
+tr:nth-child(even){background:#fbf6fd}
+tr:hover{background:#f0e0fb}
+
+/* ... resto permanece igual ... */
+
+</style>
+</head>
+<body>
+
+<header>Gestão de Notas Fiscais</header>
+
+<nav>
+    <button id="btnForm" class="active">Cadastrar NF</button>
+    <button id="btnView">Visualizar NFs</button>
+    <button id="btnEmails">Emails</button>
+    <button id="btnManual">Manual COBERTURA</button>
+</nav>
+
+<!-- Cadastrar NF -->
+<section id="formSection" class="active">
+    <form id="nfForm">
+        <label for="razao">Razão Social:</label>
+        <input type="text" id="razao" required oninput="atualizarPreview()">
+
+        <label for="nfVenda">Nº NF Venda:</label>
+        <input type="text" id="nfVenda" required oninput="atualizarPreview()">
+
+        <label for="nfRemessa">Nº NF Remessa (Fornecedor):</label>
+        <input type="text" id="nfRemessa" oninput="atualizarPreview()">
+
+        <label for="nfCobertura">Nº NF Cobertura:</label>
+        <input type="text" id="nfCobertura">
+
+        <label for="fabrica">Fábrica:</label>
+        <select id="fabrica" required>
+            <option value="">--Selecione--</option>
+            <option value="ICNB">ICNB</option>
+            <option value="UNA">UNA</option>
+            <option value="NATURELLE">NATURELLE</option>
+            <option value="DECOR">DECOR</option>
+            <option value="AERCAMP">AERCAMP</option>
+        </select>
+
+        <label for="arquivo">Arquivo PDF:</label>
+        <input type="file" id="arquivo" accept="application/pdf" required>
+
+        <label for="observacao">Observação:</label>
+        <input type="text" id="observacao" placeholder="Digite aqui uma observação">
+
+        <!-- 🔹 Caixa dinâmica solicitada -->
+        <div id="previewMessage" class="previewBox">
+            Digite os dados acima para gerar a mensagem automaticamente.
+        </div>
+
+        <button type="button" class="send" onclick="enviarNF()">Enviar NF</button>
+    </form>
+</section>
+
+<!-- TODO o resto do seu código permanece idêntico (Visualizar, Emails, Scripts etc.) -->
+
+<script>
+function atualizarPreview(){
+    const venda = document.getElementById("nfVenda").value.trim();
+    const razao = document.getElementById("razao").value.trim();
+    const remessa = document.getElementById("nfRemessa").value.trim();
+
+    const texto =
+`segue NF de cobertura referente a NF ${venda || "(Nº NF Venda)"} - ${razao || "(Razão Social)"}
+NF de remessa ${remessa || "(Nº NF Remessa)"}`;
+
+    document.getElementById("previewMessage").textContent = texto;
+}
+</script>
+
+</body>
+</html>
